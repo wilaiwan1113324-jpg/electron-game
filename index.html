@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚛️ การจัดเรียงอิเล็กตรอน</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f5f6fa;--surface:#fff;--surface2:#f1f3f8;--border:#e0e4ef;--border2:#c8cfe0;
+  --text:#1a1d2e;--text2:#4a5072;--text3:#8a94b8;
+  --blue:#2563eb;--blue2:#1d4ed8;--green:#16a34a;--red:#dc2626;
+  --orange:#ea580c;--gold:#ca8a04;--purple:#7c3aed;
+  --n1:#e03131;--n2:#e8590c;--n3:#f59f00;--n4:#2f9e44;--n5:#1971c2;--n6:#7048e8;--n7:#c2255c;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.05);
+  --shadow2:0 4px 16px rgba(0,0,0,.1);
+  --shadow3:0 8px 32px rgba(0,0,0,.12);
+}
+html,body{height:100%;font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--text);}
+
+/* ─── SCREENS ─── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ═══════════════════════════════════════
+   LOGIN SCREEN
+═══════════════════════════════════════ */
+#loginScreen{align-items:center;justify-content:center;background:linear-gradient(135deg,#eff6ff 0%,#f5f3ff 100%);}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 44px;width:380px;max-width:92vw;box-shadow:var(--shadow3);text-align:center;}
+.login-logo{font-size:3rem;margin-bottom:12px;}
+.login-title{font-size:1.6rem;font-weight:800;color:var(--text);margin-bottom:4px;}
+.login-sub{font-size:.88rem;color:var(--text3);margin-bottom:28px;}
+.field{margin-bottom:14px;text-align:left;}
+.field label{display:block;font-size:.8rem;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.3px;}
+.field input{width:100%;padding:11px 14px;border:1.5px solid var(--border2);border-radius:9px;font-size:.95rem;font-family:'Sarabun',sans-serif;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s;}
+.field input:focus{border-color:var(--blue);}
+.field input.err{border-color:var(--red);}
+.login-btn{width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;font-family:'Sarabun',sans-serif;cursor:pointer;transition:background .2s;margin-top:6px;}
+.login-btn:hover{background:var(--blue2);}
+.login-err{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:9px 14px;font-size:.82rem;color:var(--red);margin-top:10px;display:none;}
+
+/* ═══════════════════════════════════════
+   MAIN SCREEN
+═══════════════════════════════════════ */
+#mainScreen{flex-direction:column;}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:0;z-index:50;box-shadow:var(--shadow);}
+.topbar-inner{max-width:1120px;margin:0 auto;height:54px;display:flex;align-items:center;gap:14px;}
+.topbar-logo{font-size:1.2rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px;}
+.topbar-tabs{display:flex;gap:0;margin-left:24px;}
+.ttab{padding:8px 16px;border:none;background:transparent;font-family:'Sarabun',sans-serif;font-size:.85rem;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;height:54px;transition:all .2s;}
+.ttab:hover{color:var(--text);}
+.ttab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.user-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:6px;}
+.score-chip{background:#eff6ff;border:1px solid #bfdbfe;border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:700;color:var(--blue);}
+.logout-btn{padding:5px 12px;border:1px solid var(--border2);border-radius:8px;background:transparent;font-family:'Sarabun',sans-serif;font-size:.78rem;color:var(--text3);cursor:pointer;}
+.logout-btn:hover{background:var(--surface2);}
+
+/* ── PAGES ── */
+.page{display:none;max-width:1120px;margin:0 auto;padding:20px 16px 60px;width:100%;}
+.page.active{display:block;}
+
+/* ─── LESSON ─── */
+.lesson-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:680px){.lesson-grid{grid-template-columns:1fr;}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow);}
+.card h3{font-size:.95rem;font-weight:700;margin-bottom:10px;}
+.card p,.card li{font-size:.83rem;line-height:1.8;color:var(--text2);}
+.card ul{padding-left:16px;}
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.82rem;color:#1e40af;}
+.rule-list{display:flex;flex-direction:column;gap:7px;margin-top:8px;}
+.rule-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-radius:8px;border-left:3px solid;}
+.rule-text{font-size:.82rem;color:var(--text2);}
+.rule-text b{color:var(--text);}
+.big-table{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.79rem;}
+th{background:var(--surface2);color:var(--text2);padding:7px 9px;text-align:center;border:1px solid var(--border);font-weight:600;}
+td{padding:5px 9px;text-align:center;border:1px solid var(--border);color:var(--text2);}
+tr:nth-child(even)td{background:#fafbff;}
+.chip{font-family:'Fira Code',monospace;font-size:.77rem;color:var(--blue);background:#eff6ff;padding:2px 6px;border-radius:4px;}
+
+/* ─── STAGE SELECT ─── */
+.stage-header{margin-bottom:20px;}
+.stage-header h2{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:4px;}
+.stage-header p{font-size:.85rem;color:var(--text3);}
+.stage-progress{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:20px;box-shadow:var(--shadow);}
+.sp-num{font-size:2rem;font-weight:800;color:var(--blue);}
+.sp-info{flex:1;}
+.sp-title{font-size:.85rem;font-weight:600;color:var(--text);}
+.sp-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:6px;}
+.sp-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:4px;transition:width .5s;}
+.stage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.stage-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px 16px;cursor:pointer;transition:all .2s;position:relative;box-shadow:var(--shadow);}
+.stage-card:hover:not(.locked){border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow2);}
+.stage-card.locked{opacity:.5;cursor:not-allowed;pointer-events:none;}
+.stage-card.completed{border-color:var(--green);}
+.stage-card.current-stage{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.stage-num{font-size:1.6rem;font-weight:800;color:var(--blue);margin-bottom:4px;}
+.stage-card.completed .stage-num{color:var(--green);}
+.stage-card.locked .stage-num{color:var(--text3);}
+.stage-name{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:2px;}
+.stage-desc{font-size:.76rem;color:var(--text3);margin-bottom:8px;line-height:1.4;}
+.stage-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.stage-badge{font-size:.7rem;padding:3px 8px;border-radius:20px;font-weight:600;}
+.sb-easy{background:#dcfce7;color:#166534;}
+.sb-mid{background:#fef3c7;color:#92400e;}
+.sb-hard{background:#fee2e2;color:#991b1b;}
+.sb-expert{background:#ede9fe;color:#4c1d95;}
+.sb-master{background:#fce7f3;color:#831843;}
+.stage-stars{font-size:.8rem;}
+.stage-lock-icon{position:absolute;top:12px;right:14px;font-size:1.1rem;color:var(--text3);}
+.stage-check{position:absolute;top:12px;right:14px;font-size:1.1rem;color:var(--green);}
+.req-note{font-size:.7rem;color:var(--text3);margin-top:4px;}
+
+/* ─── GAME ─── */
+.game-layout{display:grid;grid-template-columns:1fr 300px;gap:14px;}
+@media(max-width:820px){.game-layout{grid-template-columns:1fr;}}
+
+/* stage info bar */
+.stage-infobar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);}
+.sib-stage{font-size:.75rem;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
+.sib-name{font-size:1rem;font-weight:700;color:var(--text);}
+.sib-prog{flex:1;}
+.sib-progbar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:4px;}
+.sib-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width .4s;}
+.sib-right{display:flex;align-items:center;gap:10px;}
+.back-btn{padding:6px 14px;border:1px solid var(--border2);border-radius:8px;background:var(--surface2);font-family:'Sarabun',sans-serif;font-size:.8rem;color:var(--text2);cursor:pointer;font-weight:500;}
+.back-btn:hover{background:var(--border);}
+
+/* element display */
+.el-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);position:relative;margin-bottom:12px;}
+.el-toprow{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.timer-box{background:var(--surface2);border:2px solid var(--border2);border-radius:10px;padding:6px 14px;text-align:center;min-width:76px;transition:all .3s;}
+.timer-num{font-size:1.8rem;font-weight:800;font-family:'Fira Code',monospace;line-height:1;color:var(--text);}
+.timer-lbl{font-size:.6rem;color:var(--text3);}
+.timer-box.warn{border-color:var(--red);animation:tpulse .6s ease-in-out infinite;}
+.timer-box.ok{border-color:var(--green);}
+@keyframes tpulse{0%,100%{box-shadow:none;}50%{box-shadow:0 0 0 4px rgba(220,38,38,.15);}}
+.streak-box{background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:6px 12px;text-align:center;}
+.streak-num{font-size:1.3rem;font-weight:800;color:#78350f;line-height:1;}
+.streak-lbl{font-size:.6rem;color:#92400e;}
+.start-btn{flex:1;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;font-family:'Sarabun',sans-serif;cursor:pointer;transition:background .2s;}
+.start-btn:hover{background:var(--blue2);}
+.el-body{display:flex;align-items:center;gap:16px;}
+.el-badge-box{width:76px;height:76px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.el-sym{font-size:2rem;font-weight:800;line-height:1;}
+.el-znum{font-size:.7rem;font-weight:600;margin-top:1px;opacity:.75;}
+.el-details{flex:1;}
+.el-name{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:2px;}
+.el-type{font-size:.78rem;color:var(--text3);margin-bottom:4px;}
+.el-count{font-size:.95rem;font-weight:600;color:var(--blue);}
+
+/* orbit */
+.orbit-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;margin-bottom:12px;}
+#orbitCanvas{display:block;}
+.config-label{font-family:'Fira Code',monospace;font-size:.84rem;color:var(--blue);font-weight:500;}
+
+/* spinners */
+.spinners-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px;}
+.spinners-title{font-size:.7rem;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.spinner-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.spin-lbl{width:44px;font-size:.8rem;font-weight:700;}
+.spin-ctrl{display:flex;align-items:center;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden;background:var(--surface2);}
+.spin-ctrl.over{border-color:var(--red);}
+.spin-btn{width:34px;height:36px;border:none;background:transparent;font-size:1rem;font-weight:700;cursor:pointer;color:var(--text2);transition:background .12s;}
+.spin-btn:hover{background:var(--border);}
+.spin-val{width:48px;text-align:center;font-size:1rem;font-weight:700;font-family:'Fira Code',monospace;color:var(--text);}
+.spin-bar{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+.spin-fill{height:100%;border-radius:3px;transition:width .2s;}
+.spin-max{font-size:.7rem;color:var(--text3);width:44px;text-align:right;}
+.total-row{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface2);border-radius:8px;margin-top:4px;border:1px solid var(--border);}
+.total-label{font-size:.8rem;color:var(--text3);}
+.total-val{font-size:1rem;font-weight:700;color:var(--text);}
+.total-need{margin-left:auto;font-size:.78rem;color:var(--text3);}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.btn{padding:9px 16px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);font-family:'Sarabun',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text2);}
+.btn:hover{background:var(--surface2);}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue);}
+.btn-primary:hover{background:var(--blue2);}
+.btn-primary:disabled{background:var(--border2);border-color:var(--border2);cursor:not-allowed;color:#fff;}
+.btn-danger{background:#fef2f2;border-color:var(--red);color:var(--red);}
+.btn-hint{background:#fefce8;border-color:#fde68a;color:#78350f;}
+.hint-box{display:none;background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:9px 12px;font-size:.81rem;color:#78350f;line-height:1.6;margin-top:8px;}
+
+/* stats */
+.stats-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow);}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;}
+.stat-val{font-size:1.05rem;font-weight:700;color:var(--text);}
+.stat-lbl{font-size:.63rem;color:var(--text3);margin-top:2px;}
+
+/* right col */
+.right-col{display:flex;flex-direction:column;gap:12px;}
+.el-queue{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:var(--shadow);max-height:420px;overflow-y:auto;}
+.eq-title{font-size:.7rem;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.eq-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid transparent;margin-bottom:3px;cursor:pointer;transition:all .15s;}
+.eq-item:hover{background:var(--surface2);border-color:var(--border);}
+.eq-item.eq-current{background:#eff6ff;border-color:#bfdbfe;}
+.eq-item.eq-done{opacity:.55;}
+.eq-sym{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;}
+.eq-name{font-size:.8rem;color:var(--text);flex:1;}
+.eq-z{font-size:.68rem;color:var(--text3);}
+
+/* result overlay */
+.result-overlay{position:absolute;inset:0;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30;animation:ovIn .25s ease;}
+@keyframes ovIn{from{opacity:0;transform:scale(.9);}to{opacity:1;transform:scale(1);}}
+.result-overlay.ok-ov{background:rgba(240,253,244,.95);border:2px solid var(--green);}
+.result-overlay.fail-ov{background:rgba(254,242,242,.95);border:2px solid var(--red);}
+.ov-icon{font-size:3rem;margin-bottom:8px;}
+.ov-title{font-size:1.3rem;font-weight:800;margin-bottom:4px;}
+.ov-sub{font-size:.83rem;color:var(--text2);margin-bottom:12px;text-align:center;}
+.ov-pts{font-size:1.9rem;font-weight:800;font-family:'Fira Code',monospace;color:var(--blue);}
+
+/* ─── STAGE CLEAR MODAL ─── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:center;justify-content:center;}
+.modal{background:var(--surface);border-radius:20px;padding:32px 36px;max-width:420px;width:92vw;box-shadow:var(--shadow3);text-align:center;}
+.modal-icon{font-size:3.5rem;margin-bottom:10px;}
+.modal-title{font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:6px;}
+.modal-sub{font-size:.88rem;color:var(--text2);line-height:1.7;margin-bottom:20px;}
+.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.ms-box{background:var(--surface2);border-radius:10px;padding:10px;}
+.ms-val{font-size:1.3rem;font-weight:800;color:var(--text);}
+.ms-lbl{font-size:.7rem;color:var(--text3);margin-top:2px;}
+.modal-btn{padding:12px 28px;border-radius:10px;border:none;font-family:'Sarabun',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;}
+.modal-btn.primary{background:var(--blue);color:#fff;margin-right:8px;}
+.modal-btn.primary:hover{background:var(--blue2);}
+.modal-btn.sec{background:var(--surface2);color:var(--text2);border:1px solid var(--border2);}
+.modal-stars{font-size:2rem;margin-bottom:8px;letter-spacing:8px;}
+
+/* particles */
+#ptLayer{position:fixed;inset:0;pointer-events:none;z-index:150;}
+.pt{position:absolute;pointer-events:none;}
+
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 22px;box-shadow:var(--shadow2);z-index:300;font-size:.88rem;font-weight:600;color:var(--text);animation:toastIn .3s ease,toastOut .5s ease 2.5s forwards;pointer-events:none;white-space:nowrap;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+@keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(12px);}}
+
+/* anims */
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}40%{transform:translateX(9px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+@keyframes popIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+/* type colors */
+.t-alkali{background:#fff7ed;color:#9a3412;}.t-alkaline{background:#fefce8;color:#713f12;}.t-transition{background:#f0fdf4;color:#14532d;}.t-posttransition{background:#eff6ff;color:#1e3a5f;}.t-metalloid{background:#f5f3ff;color:#3b0764;}.t-nonmetal{background:#fdf2f8;color:#701a75;}.t-halogen{background:#fff1f2;color:#881337;}.t-noble{background:#f8fafc;color:#1e293b;}.t-lanthanide{background:#ecfeff;color:#164e63;}.t-actinide{background:#fff7ed;color:#7c2d12;}
+
+/* resp */
+@media(max-width:600px){.stage-grid{grid-template-columns:1fr 1fr;}.login-card{padding:28px 22px;}.modal{padding:24px 20px;}}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="screen active" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">⚛️</div>
+    <div class="login-title">การจัดเรียงอิเล็กตรอน</div>
+    <div class="login-sub">เข้าสู่ระบบเพื่อเริ่มแข่งขัน</div>
+    <div class="field">
+      <label>ชื่อผู้ใช้ (Username)</label>
+      <input id="uInput" type="text" placeholder="ใส่ชื่อของคุณ" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>รหัสผ่าน (Password)</label>
+      <input id="pInput" type="password" placeholder="••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+    <div class="login-err" id="loginErr">ชื่อผู้ใช้ไม่ถูกต้อง หรือรหัสผ่านผิด</div>
+    <div style="font-size:.76rem;color:var(--text3);margin-top:16px;">รหัสผ่านสำหรับนักเรียน: <b style="color:var(--text)">123456</b></div>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="screen" id="mainScreen">
+  <!-- topbar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-logo">⚛️ อิเล็กตรอน</div>
+      <div class="topbar-tabs">
+        <button class="ttab active" onclick="switchPage('lesson',this)">📚 บทเรียน</button>
+        <button class="ttab" onclick="switchPage('stages',this)">🗺️ ด่าน</button>
+        <button class="ttab" id="gameTabBtn" onclick="switchPage('game',this)" style="display:none">⚔️ เล่น</button>
+      </div>
+      <div class="topbar-right">
+        <div class="score-chip">⭐ <span id="topScore">0</span></div>
+        <div class="user-chip">👤 <span id="topUser">-</span></div>
+        <button class="logout-btn" onclick="doLogout()">ออก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- pages -->
+  <div class="page active" id="page-lesson">
+    <div class="lesson-grid">
+      <div class="card" style="grid-column:1/-1">
+        <h3>🌟 ระดับพลังงานของอิเล็กตรอน คืออะไร?</h3>
+        <p>อิเล็กตรอนที่โคจรรอบนิวเคลียสอยู่ใน <b>ระดับพลังงาน (Energy Level)</b> ที่กำหนด ไม่ได้กระจายแบบสุ่ม เปรียบเหมือนขั้นบันไดที่กระโดดได้แค่ขั้นต่อขั้น</p>
+        <div class="info-box" style="margin-top:10px">💡 ระดับพลังงานแสดงด้วยตัวเลข <b>n = 1, 2, 3, 4, 5, 6, 7</b> — n=1 อยู่ใกล้นิวเคลียส พลังงานต่ำที่สุด</div>
+      </div>
+      <div class="card">
+        <h3>📏 กฎการจัดเรียง (สูตร 2n²)</h3>
+        <div class="rule-list">
+          <div class="rule-item" style="border-color:#e03131"><div class="rule-text"><b style="color:#e03131">n=1</b> — สูงสุด <b>2 ตัว</b></div></div>
+          <div class="rule-item" style="border-color:#e8590c"><div class="rule-text"><b style="color:#e8590c">n=2</b> — สูงสุด <b>8 ตัว</b></div></div>
+          <div class="rule-item" style="border-color:#f59f00"><div class="rule-text"><b style="color:#f59f00">n=3</b> — สูงสุด <b>18 ตัว</b></div></div>
+          <div class="rule-item" style="border-color:#2f9e44"><div class="rule-text"><b style="color:#2f9e44">n=4</b> — สูงสุด <b>32 ตัว</b></div></div>
+          <div class="rule-item" style="border-color:#1971c2"><div class="rule-text"><b style="color:#1971c2">n=5,6,7</b> — 32, 18, 8 ตัว</div></div>
+        </div>
+        <div class="info-box" style="margin-top:10px">⚠️ ชั้นนอกสุดมีได้ไม่เกิน <b>8 ตัว</b> สำหรับธาตุ Z=1–18</div>
+      </div>
+      <div class="card">
+        <h3>🔢 วิธีจัดเรียง — ตัวอย่าง Na (Z=11)</h3>
+        <div class="rule-list">
+          <div class="rule-item" style="border-color:#e03131"><div class="rule-text">① อิเล็กตรอนทั้งหมด = <b>11 ตัว</b></div></div>
+          <div class="rule-item" style="border-color:#e8590c"><div class="rule-text">② n=1 รับ <b>2 ตัว</b> → เหลือ 9</div></div>
+          <div class="rule-item" style="border-color:#f59f00"><div class="rule-text">③ n=2 รับ <b>8 ตัว</b> → เหลือ 1</div></div>
+          <div class="rule-item" style="border-color:#2f9e44"><div class="rule-text">④ n=3 รับ <b>1 ตัว</b> → <b>สรุป: 2,8,1</b></div></div>
+        </div>
+      </div>
+      <div class="card" style="grid-column:1/-1">
+        <h3>📋 ตารางธาตุ Z=1–20</h3>
+        <div class="big-table"><table>
+          <thead><tr><th>ธาตุ</th><th>Z</th><th style="color:#e03131">n=1</th><th style="color:#e8590c">n=2</th><th style="color:#f59f00">n=3</th><th style="color:#2f9e44">n=4</th><th>การเขียน</th></tr></thead>
+          <tbody id="lessonTable"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-stages">
+    <div class="stage-header">
+      <h2>🗺️ เลือกด่านที่จะเล่น</h2>
+      <p>ผ่านด่านก่อนหน้าเพื่อปลดล็อกด่านต่อไป</p>
+    </div>
+    <div class="stage-progress">
+      <div class="sp-num" id="spNum">0</div>
+      <div class="sp-info">
+        <div class="sp-title">ด่านที่ผ่านแล้ว / ทั้งหมด <span id="spTotal">0</span> ด่าน</div>
+        <div class="sp-bar"><div class="sp-fill" id="spFill" style="width:0%"></div></div>
+      </div>
+      <div style="font-size:.85rem;color:var(--text2);">คะแนนรวม <b id="spScore">0</b></div>
+    </div>
+    <div class="stage-grid" id="stageGrid"></div>
+  </div>
+
+  <div class="page" id="page-game">
+    <div class="stage-infobar">
+      <div class="sib-prog">
+        <div class="sib-stage" id="sibStageLabel">ด่านที่ 1</div>
+        <div class="sib-name" id="sibStageName">ธาตุเบื้องต้น</div>
+        <div class="sib-progbar"><div class="sib-fill" id="sibFill" style="width:0%"></div></div>
+      </div>
+      <div class="sib-right">
+        <span style="font-size:.82rem;color:var(--text3)" id="sibProg">0/0</span>
+        <button class="back-btn" onclick="leaveGame()">← ออกจากด่าน</button>
+      </div>
+    </div>
+
+    <div class="game-layout">
+      <div>
+        <!-- Element -->
+        <div class="el-card" id="elCard">
+          <div class="el-toprow">
+            <div class="timer-box ok" id="timerBox">
+              <div class="timer-num" id="timerNum">30</div>
+              <div class="timer-lbl">วินาที</div>
+            </div>
+            <div class="streak-box">
+              <div class="streak-num" id="streakNum">🔥0</div>
+              <div class="streak-lbl">สายติด</div>
+            </div>
+            <button class="start-btn" id="startBtn" onclick="startRound()">▶ เริ่ม</button>
+          </div>
+          <div class="el-body">
+            <div class="el-badge-box" id="elBadge">
+              <div class="el-sym" id="elSym">?</div>
+              <div class="el-znum" id="elZnum">Z=?</div>
+            </div>
+            <div class="el-details">
+              <div class="el-name" id="elName">รอเริ่มเกม</div>
+              <div class="el-type" id="elType">—</div>
+              <div class="el-count" id="elCount"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orbit -->
+        <div class="orbit-wrap" id="orbitWrap">
+          <canvas id="orbitCanvas" width="300" height="300"></canvas>
+          <div class="config-label" id="configLabel">—</div>
+        </div>
+
+        <!-- Spinners -->
+        <div class="spinners-wrap">
+          <div class="spinners-title">กำหนดจำนวนอิเล็กตรอนในแต่ละระดับ</div>
+          <div id="spinnerRows"></div>
+          <div class="total-row">
+            <span class="total-label">รวม:</span>
+            <span class="total-val" id="totalVal">0</span>
+            <span class="total-need" id="totalNeed"></span>
+          </div>
+          <div class="hint-box" id="hintBox"></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="checkBtn" onclick="checkAnswer()" disabled>✓ ตรวจคำตอบ</button>
+            <button class="btn btn-danger" onclick="resetSpins()">↺ ล้าง</button>
+            <button class="btn btn-hint" onclick="useHint()">💡 คำใบ้ (-10)</button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-card">
+          <div class="spinners-title">สถิติด่านนี้</div>
+          <div class="stats-grid">
+            <div><div class="stat-val" style="color:var(--green)" id="sCorrect">0</div><div class="stat-lbl">ถูก</div></div>
+            <div><div class="stat-val" style="color:var(--red)" id="sWrong">0</div><div class="stat-lbl">ผิด</div></div>
+            <div><div class="stat-val" style="color:var(--orange)" id="sBest">—</div><div class="stat-lbl">เร็วสุด(s)</div></div>
+            <div><div class="stat-val" style="color:var(--blue)" id="sAvg">—</div><div class="stat-lbl">เฉลี่ย(s)</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="el-queue">
+          <div class="eq-title">คิวธาตุในด่านนี้</div>
+          <div id="elQueue"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modals -->
+<div class="modal-bg" id="clearModal" style="display:none">
+  <div class="modal">
+    <div class="modal-icon" id="clearIcon">🎉</div>
+    <div class="modal-stars" id="clearStars">⭐⭐⭐</div>
+    <div class="modal-title" id="clearTitle">ผ่านด่านแล้ว!</div>
+    <div class="modal-sub" id="clearSub"></div>
+    <div class="modal-stats">
+      <div class="ms-box"><div class="ms-val" id="mCorrect">0</div><div class="ms-lbl">ถูก</div></div>
+      <div class="ms-box"><div class="ms-val" id="mTime">0s</div><div class="ms-lbl">เร็วสุด</div></div>
+      <div class="ms-box"><div class="ms-val" id="mPts">0</div><div class="ms-lbl">คะแนน</div></div>
+    </div>
+    <button class="modal-btn primary" id="nextStageBtn" onclick="goNextStage()">ด่านต่อไป →</button>
+    <button class="modal-btn sec" onclick="goStageMap()">แผนที่ด่าน</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="failModal" style="display:none">
+  <div class="modal">
+    <div class="modal-icon">💀</div>
+    <div class="modal-title" style="color:var(--red)">ไม่ผ่านด่าน</div>
+    <div class="modal-sub" id="failSub"></div>
+    <button class="modal-btn primary" onclick="retryStage()">↺ เล่นใหม่</button>
+    <button class="modal-btn sec" onclick="goStageMap()">แผนที่ด่าน</button>
+  </div>
+</div>
+
+<div id="ptLayer"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// DATA — 118 ELEMENTS
+// ════════════════════════════════════════════════════════════
+const ELEMENTS=[
+  {Z:1,sym:'H',th:'ไฮโดรเจน',type:'nonmetal',c:[1,0,0,0,0,0,0]},
+  {Z:2,sym:'He',th:'ฮีเลียม',type:'noble',c:[2,0,0,0,0,0,0]},
+  {Z:3,sym:'Li',th:'ลิเทียม',type:'alkali',c:[2,1,0,0,0,0,0]},
+  {Z:4,sym:'Be',th:'เบริลเลียม',type:'alkaline',c:[2,2,0,0,0,0,0]},
+  {Z:5,sym:'B',th:'โบรอน',type:'metalloid',c:[2,3,0,0,0,0,0]},
+  {Z:6,sym:'C',th:'คาร์บอน',type:'nonmetal',c:[2,4,0,0,0,0,0]},
+  {Z:7,sym:'N',th:'ไนโตรเจน',type:'nonmetal',c:[2,5,0,0,0,0,0]},
+  {Z:8,sym:'O',th:'ออกซิเจน',type:'nonmetal',c:[2,6,0,0,0,0,0]},
+  {Z:9,sym:'F',th:'ฟลูออรีน',type:'halogen',c:[2,7,0,0,0,0,0]},
+  {Z:10,sym:'Ne',th:'นีออน',type:'noble',c:[2,8,0,0,0,0,0]},
+  {Z:11,sym:'Na',th:'โซเดียม',type:'alkali',c:[2,8,1,0,0,0,0]},
+  {Z:12,sym:'Mg',th:'แมกนีเซียม',type:'alkaline',c:[2,8,2,0,0,0,0]},
+  {Z:13,sym:'Al',th:'อะลูมิเนียม',type:'posttransition',c:[2,8,3,0,0,0,0]},
+  {Z:14,sym:'Si',th:'ซิลิกอน',type:'metalloid',c:[2,8,4,0,0,0,0]},
+  {Z:15,sym:'P',th:'ฟอสฟอรัส',type:'nonmetal',c:[2,8,5,0,0,0,0]},
+  {Z:16,sym:'S',th:'กำมะถัน',type:'nonmetal',c:[2,8,6,0,0,0,0]},
+  {Z:17,sym:'Cl',th:'คลอรีน',type:'halogen',c:[2,8,7,0,0,0,0]},
+  {Z:18,sym:'Ar',th:'อาร์กอน',type:'noble',c:[2,8,8,0,0,0,0]},
+  {Z:19,sym:'K',th:'โพแทสเซียม',type:'alkali',c:[2,8,8,1,0,0,0]},
+  {Z:20,sym:'Ca',th:'แคลเซียม',type:'alkaline',c:[2,8,8,2,0,0,0]},
+  {Z:21,sym:'Sc',th:'สแกนเดียม',type:'transition',c:[2,8,9,2,0,0,0]},
+  {Z:22,sym:'Ti',th:'ไทเทเนียม',type:'transition',c:[2,8,10,2,0,0,0]},
+  {Z:23,sym:'V',th:'วาเนเดียม',type:'transition',c:[2,8,11,2,0,0,0]},
+  {Z:24,sym:'Cr',th:'โครเมียม',type:'transition',c:[2,8,13,1,0,0,0]},
+  {Z:25,sym:'Mn',th:'แมงกานีส',type:'transition',c:[2,8,13,2,0,0,0]},
+  {Z:26,sym:'Fe',th:'เหล็ก',type:'transition',c:[2,8,14,2,0,0,0]},
+  {Z:27,sym:'Co',th:'โคบอลต์',type:'transition',c:[2,8,15,2,0,0,0]},
+  {Z:28,sym:'Ni',th:'นิกเกิล',type:'transition',c:[2,8,16,2,0,0,0]},
+  {Z:29,sym:'Cu',th:'ทองแดง',type:'transition',c:[2,8,18,1,0,0,0]},
+  {Z:30,sym:'Zn',th:'สังกะสี',type:'transition',c:[2,8,18,2,0,0,0]},
+  {Z:31,sym:'Ga',th:'แกลเลียม',type:'posttransition',c:[2,8,18,3,0,0,0]},
+  {Z:32,sym:'Ge',th:'เจอร์เมเนียม',type:'metalloid',c:[2,8,18,4,0,0,0]},
+  {Z:33,sym:'As',th:'สารหนู',type:'metalloid',c:[2,8,18,5,0,0,0]},
+  {Z:34,sym:'Se',th:'ซีลีเนียม',type:'nonmetal',c:[2,8,18,6,0,0,0]},
+  {Z:35,sym:'Br',th:'โบรมีน',type:'halogen',c:[2,8,18,7,0,0,0]},
+  {Z:36,sym:'Kr',th:'คริปทอน',type:'noble',c:[2,8,18,8,0,0,0]},
+  {Z:37,sym:'Rb',th:'รูบิเดียม',type:'alkali',c:[2,8,18,8,1,0,0]},
+  {Z:38,sym:'Sr',th:'สตรอนเชียม',type:'alkaline',c:[2,8,18,8,2,0,0]},
+  {Z:39,sym:'Y',th:'อิตเทรียม',type:'transition',c:[2,8,18,9,2,0,0]},
+  {Z:40,sym:'Zr',th:'เซอร์โคเนียม',type:'transition',c:[2,8,18,10,2,0,0]},
+  {Z:41,sym:'Nb',th:'ไนโอเบียม',type:'transition',c:[2,8,18,12,1,0,0]},
+  {Z:42,sym:'Mo',th:'โมลิบดีนัม',type:'transition',c:[2,8,18,13,1,0,0]},
+  {Z:43,sym:'Tc',th:'เทคนีเชียม',type:'transition',c:[2,8,18,13,2,0,0]},
+  {Z:44,sym:'Ru',th:'รูทีเนียม',type:'transition',c:[2,8,18,15,1,0,0]},
+  {Z:45,sym:'Rh',th:'โรเดียม',type:'transition',c:[2,8,18,16,1,0,0]},
+  {Z:46,sym:'Pd',th:'แพลเลเดียม',type:'transition',c:[2,8,18,18,0,0,0]},
+  {Z:47,sym:'Ag',th:'เงิน',type:'transition',c:[2,8,18,18,1,0,0]},
+  {Z:48,sym:'Cd',th:'แคดเมียม',type:'transition',c:[2,8,18,18,2,0,0]},
+  {Z:49,sym:'In',th:'อินเดียม',type:'posttransition',c:[2,8,18,18,3,0,0]},
+  {Z:50,sym:'Sn',th:'ดีบุก',type:'posttransition',c:[2,8,18,18,4,0,0]},
+  {Z:51,sym:'Sb',th:'พลวง',type:'metalloid',c:[2,8,18,18,5,0,0]},
+  {Z:52,sym:'Te',th:'เทลลูเรียม',type:'metalloid',c:[2,8,18,18,6,0,0]},
+  {Z:53,sym:'I',th:'ไอโอดีน',type:'halogen',c:[2,8,18,18,7,0,0]},
+  {Z:54,sym:'Xe',th:'ซีนอน',type:'noble',c:[2,8,18,18,8,0,0]},
+  {Z:55,sym:'Cs',th:'ซีเซียม',type:'alkali',c:[2,8,18,18,8,1,0]},
+  {Z:56,sym:'Ba',th:'แบเรียม',type:'alkaline',c:[2,8,18,18,8,2,0]},
+  {Z:57,sym:'La',th:'แลนทานัม',type:'lanthanide',c:[2,8,18,18,9,2,0]},
+  {Z:58,sym:'Ce',th:'ซีเรียม',type:'lanthanide',c:[2,8,18,19,9,2,0]},
+  {Z:59,sym:'Pr',th:'เพรซีโอดิเมียม',type:'lanthanide',c:[2,8,18,21,8,2,0]},
+  {Z:60,sym:'Nd',th:'นีโอดิเมียม',type:'lanthanide',c:[2,8,18,22,8,2,0]},
+  {Z:61,sym:'Pm',th:'โพรมีเธียม',type:'lanthanide',c:[2,8,18,23,8,2,0]},
+  {Z:62,sym:'Sm',th:'ซาแมเรียม',type:'lanthanide',c:[2,8,18,24,8,2,0]},
+  {Z:63,sym:'Eu',th:'ยูโรเพียม',type:'lanthanide',c:[2,8,18,25,8,2,0]},
+  {Z:64,sym:'Gd',th:'แกโดลิเนียม',type:'lanthanide',c:[2,8,18,25,9,2,0]},
+  {Z:65,sym:'Tb',th:'เทอร์เบียม',type:'lanthanide',c:[2,8,18,27,8,2,0]},
+  {Z:66,sym:'Dy',th:'ดิสโพรเซียม',type:'lanthanide',c:[2,8,18,28,8,2,0]},
+  {Z:67,sym:'Ho',th:'โฮลเมียม',type:'lanthanide',c:[2,8,18,29,8,2,0]},
+  {Z:68,sym:'Er',th:'เออร์เบียม',type:'lanthanide',c:[2,8,18,30,8,2,0]},
+  {Z:69,sym:'Tm',th:'ทูเลียม',type:'lanthanide',c:[2,8,18,31,8,2,0]},
+  {Z:70,sym:'Yb',th:'อิตเทอร์เบียม',type:'lanthanide',c:[2,8,18,32,8,2,0]},
+  {Z:71,sym:'Lu',th:'ลูทีเชียม',type:'lanthanide',c:[2,8,18,32,9,2,0]},
+  {Z:72,sym:'Hf',th:'แฮฟเนียม',type:'transition',c:[2,8,18,32,10,2,0]},
+  {Z:73,sym:'Ta',th:'แทนทาลัม',type:'transition',c:[2,8,18,32,11,2,0]},
+  {Z:74,sym:'W',th:'ทังสเตน',type:'transition',c:[2,8,18,32,12,2,0]},
+  {Z:75,sym:'Re',th:'รีเนียม',type:'transition',c:[2,8,18,32,13,2,0]},
+  {Z:76,sym:'Os',th:'ออสเมียม',type:'transition',c:[2,8,18,32,14,2,0]},
+  {Z:77,sym:'Ir',th:'อิริเดียม',type:'transition',c:[2,8,18,32,15,2,0]},
+  {Z:78,sym:'Pt',th:'แพลตินัม',type:'transition',c:[2,8,18,32,17,1,0]},
+  {Z:79,sym:'Au',th:'ทองคำ',type:'transition',c:[2,8,18,32,18,1,0]},
+  {Z:80,sym:'Hg',th:'ปรอท',type:'transition',c:[2,8,18,32,18,2,0]},
+  {Z:81,sym:'Tl',th:'แทลเลียม',type:'posttransition',c:[2,8,18,32,18,3,0]},
+  {Z:82,sym:'Pb',th:'ตะกั่ว',type:'posttransition',c:[2,8,18,32,18,4,0]},
+  {Z:83,sym:'Bi',th:'บิสมัท',type:'posttransition',c:[2,8,18,32,18,5,0]},
+  {Z:84,sym:'Po',th:'โพโลเนียม',type:'posttransition',c:[2,8,18,32,18,6,0]},
+  {Z:85,sym:'At',th:'แอสทาทีน',type:'halogen',c:[2,8,18,32,18,7,0]},
+  {Z:86,sym:'Rn',th:'เรดอน',type:'noble',c:[2,8,18,32,18,8,0]},
+  {Z:87,sym:'Fr',th:'แฟรนเซียม',type:'alkali',c:[2,8,18,32,18,8,1]},
+  {Z:88,sym:'Ra',th:'เรเดียม',type:'alkaline',c:[2,8,18,32,18,8,2]},
+  {Z:89,sym:'Ac',th:'แอกทิเนียม',type:'actinide',c:[2,8,18,32,18,9,2]},
+  {Z:90,sym:'Th',th:'ทอเรียม',type:'actinide',c:[2,8,18,32,18,10,2]},
+  {Z:91,sym:'Pa',th:'โพรแทกทิเนียม',type:'actinide',c:[2,8,18,32,20,9,2]},
+  {Z:92,sym:'U',th:'ยูเรเนียม',type:'actinide',c:[2,8,18,32,21,9,2]},
+  {Z:93,sym:'Np',th:'เนปทูเนียม',type:'actinide',c:[2,8,18,32,22,9,2]},
+  {Z:94,sym:'Pu',th:'พลูโทเนียม',type:'actinide',c:[2,8,18,32,24,8,2]},
+  {Z:95,sym:'Am',th:'อะเมริเซียม',type:'actinide',c:[2,8,18,32,25,8,2]},
+  {Z:96,sym:'Cm',th:'คูเรียม',type:'actinide',c:[2,8,18,32,25,9,2]},
+  {Z:97,sym:'Bk',th:'เบอร์คีเลียม',type:'actinide',c:[2,8,18,32,27,8,2]},
+  {Z:98,sym:'Cf',th:'แคลิฟอร์เนียม',type:'actinide',c:[2,8,18,32,28,8,2]},
+  {Z:99,sym:'Es',th:'ไอน์สไตนียม',type:'actinide',c:[2,8,18,32,29,8,2]},
+  {Z:100,sym:'Fm',th:'เฟอร์เมียม',type:'actinide',c:[2,8,18,32,30,8,2]},
+  {Z:101,sym:'Md',th:'เมนเดลีเวียม',type:'actinide',c:[2,8,18,32,31,8,2]},
+  {Z:102,sym:'No',th:'โนเบเลียม',type:'actinide',c:[2,8,18,32,32,8,2]},
+  {Z:103,sym:'Lr',th:'ลอว์เรนเซียม',type:'actinide',c:[2,8,18,32,32,8,3]},
+  {Z:104,sym:'Rf',th:'รัทเทอร์ฟอร์เดียม',type:'transition',c:[2,8,18,32,32,10,2]},
+  {Z:105,sym:'Db',th:'ดับเนียม',type:'transition',c:[2,8,18,32,32,11,2]},
+  {Z:106,sym:'Sg',th:'ซีบอร์เกียม',type:'transition',c:[2,8,18,32,32,12,2]},
+  {Z:107,sym:'Bh',th:'โบห์เรียม',type:'transition',c:[2,8,18,32,32,13,2]},
+  {Z:108,sym:'Hs',th:'แฮสเซียม',type:'transition',c:[2,8,18,32,32,14,2]},
+  {Z:109,sym:'Mt',th:'ไมต์เนเรียม',type:'transition',c:[2,8,18,32,32,15,2]},
+  {Z:110,sym:'Ds',th:'ดาร์มสตัดเทียม',type:'transition',c:[2,8,18,32,32,17,1]},
+  {Z:111,sym:'Rg',th:'เรินต์เกเนียม',type:'transition',c:[2,8,18,32,32,18,1]},
+  {Z:112,sym:'Cn',th:'โคเปอร์นิเซียม',type:'transition',c:[2,8,18,32,32,18,2]},
+  {Z:113,sym:'Nh',th:'นิโฮเนียม',type:'posttransition',c:[2,8,18,32,32,18,3]},
+  {Z:114,sym:'Fl',th:'เฟลโรเวียม',type:'posttransition',c:[2,8,18,32,32,18,4]},
+  {Z:115,sym:'Mc',th:'มอสโคเวียม',type:'posttransition',c:[2,8,18,32,32,18,5]},
+  {Z:116,sym:'Lv',th:'ลิเวอร์มอเรียม',type:'posttransition',c:[2,8,18,32,32,18,6]},
+  {Z:117,sym:'Ts',th:'เทนเนสซีน',type:'halogen',c:[2,8,18,32,32,18,7]},
+  {Z:118,sym:'Og',th:'โอกาเนสซอน',type:'noble',c:[2,8,18,32,32,18,8]},
+];
+
+const MAX_SHELL=[2,8,18,32,32,18,8];
+const SHELL_CLR=['#e03131','#e8590c','#f59f00','#2f9e44','#1971c2','#7048e8','#c2255c'];
+const SHELL_NAMES=['n=1','n=2','n=3','n=4','n=5','n=6','n=7'];
+const TC={alkali:'t-alkali',alkaline:'t-alkaline',transition:'t-transition',posttransition:'t-posttransition',metalloid:'t-metalloid',nonmetal:'t-nonmetal',halogen:'t-halogen',noble:'t-noble',lanthanide:'t-lanthanide',actinide:'t-actinide'};
+const TL={alkali:'โลหะอัลคาไล',alkaline:'โลหะอัลคาไลน์เอิร์ธ',transition:'โลหะทรานซิชัน',posttransition:'โลหะหลังทรานซิชัน',metalloid:'กึ่งโลหะ',nonmetal:'อโลหะ',halogen:'แฮโลเจน',noble:'แก๊สมีตระกูล',lanthanide:'แลนทาไนด์',actinide:'แอกทิไนด์'};
+
+// ════════════════════════════════════════════════════════════
+// STAGES DEFINITION — 12 stages, each 5-10 elements, seeded per player
+// ════════════════════════════════════════════════════════════
+const STAGE_DEFS=[
+  {id:1,name:'ธาตุเบื้องต้น',desc:'H–Ne ธาตุแถวแรก ง่ายมาก',badge:'sb-easy',badgeTxt:'ง่ายมาก',time:40,elements:ELEMENTS.slice(0,10),passScore:60},
+  {id:2,name:'คาบที่ 3',desc:'Na–Ar ฝึกระดับ n=3',badge:'sb-easy',badgeTxt:'ง่าย',time:35,elements:ELEMENTS.slice(10,18),passScore:70},
+  {id:3,name:'คาบที่ 4 ตอนต้น',desc:'K–Ca ธาตุ 4 ชั้น',badge:'sb-easy',badgeTxt:'ง่าย',time:35,elements:ELEMENTS.slice(18,20),passScore:70},
+  {id:4,name:'โลหะทรานซิชัน I',desc:'Sc–Zn ธาตุ d-block',badge:'sb-mid',badgeTxt:'ปานกลาง',time:30,elements:ELEMENTS.slice(20,30),passScore:75},
+  {id:5,name:'คาบที่ 4 ตอนปลาย',desc:'Ga–Kr ต้องระวังการจัดเรียง',badge:'sb-mid',badgeTxt:'ปานกลาง',time:30,elements:ELEMENTS.slice(30,36),passScore:75},
+  {id:6,name:'คาบที่ 5',desc:'Rb–Xe ธาตุ 5 ชั้น',badge:'sb-mid',badgeTxt:'ปานกลาง',time:30,elements:ELEMENTS.slice(36,54),passScore:80},
+  {id:7,name:'แลนทาไนด์',desc:'La–Lu ธาตุหายาก',badge:'sb-hard',badgeTxt:'ยาก',time:25,elements:ELEMENTS.slice(56,71),passScore:80},
+  {id:8,name:'คาบที่ 6',desc:'Cs–Rn ธาตุ 6 ชั้น',badge:'sb-hard',badgeTxt:'ยาก',time:25,elements:ELEMENTS.slice(54,56).concat(ELEMENTS.slice(71,86)),passScore:80},
+  {id:9,name:'แอกทิไนด์',desc:'Ac–Lr ธาตุกัมมันตรังสี',badge:'sb-hard',badgeTxt:'ยาก',time:25,elements:ELEMENTS.slice(88,103),passScore:80},
+  {id:10,name:'คาบที่ 7',desc:'Fr–Rn ธาตุ 7 ชั้น',badge:'sb-expert',badgeTxt:'ผู้เชี่ยวชาญ',time:20,elements:ELEMENTS.slice(86,88).concat(ELEMENTS.slice(103,118)),passScore:85},
+  {id:11,name:'ธาตุสังเคราะห์',desc:'Rf–Og ธาตุใหม่ n=7',badge:'sb-expert',badgeTxt:'ผู้เชี่ยวชาญ',time:20,elements:ELEMENTS.slice(103,118),passScore:85},
+  {id:12,name:'แชมเปี้ยน',desc:'สุ่มจากทั้ง 118 ธาตุ!',badge:'sb-master',badgeTxt:'แมสเตอร์',time:20,elements:[],passScore:90},
+];
+
+// ════════════════════════════════════════════════════════════
+// SEEDED RANDOM
+// ════════════════════════════════════════════════════════════
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++)h=(Math.imul(31,h)+s.charCodeAt(i))|0;return h>>>0;}
+function seededRng(seed){let s=seed;return()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/0xffffffff;};}
+function seededShuffle(arr,seed){const a=[...arr],rng=seededRng(seed);for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+// ════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════
+let currentUser='';
+let playerSeed=0;
+let globalScore=0;
+let stageProgress={};  // stageId -> {stars, score, bestTime}
+let currentStageId=null;
+let stageElements=[];  // elements in current stage (shuffled)
+let stageIdx=0;        // which element in stage
+let correctInStage=0, wrongInStage=0;
+let stageTotalScore=0;
+let stageStartTime=null;
+let stageBestTime=null, stageAllTimes=[];
+
+let actRunning=false, actTimer=null, timeLeft=30;
+let streak=0, correctCount=0, wrongCount=0, bestTime=null, allTimes=[];
+let startTs=0;
+let orbitAF, orbitAngles=[];
+let spinVals=[0,0,0,0,0,0,0];
+
+// ════════════════════════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════════════════════════
+function doLogin(){
+  const u=document.getElementById('uInput').value.trim();
+  const p=document.getElementById('pInput').value.trim();
+  const err=document.getElementById('loginErr');
+  document.getElementById('uInput').classList.remove('err');
+  document.getElementById('pInput').classList.remove('err');
+  err.style.display='none';
+  if(!u||p!=='123456'){
+    err.style.display='block';
+    if(!u)document.getElementById('uInput').classList.add('err');
+    if(p!=='123456')document.getElementById('pInput').classList.add('err');
+    return;
+  }
+  currentUser=u;
+  playerSeed=hashStr(u);
+  document.getElementById('topUser').textContent=u;
+  // Load saved progress from localStorage
+  const saved=localStorage.getItem('elec_progress_'+u);
+  if(saved)try{const d=JSON.parse(saved);stageProgress=d.stageProgress||{};globalScore=d.globalScore||0;}catch(e){}
+  // Stage 12 uses seeded random
+  STAGE_DEFS[11].elements=seededShuffle(ELEMENTS,playerSeed).slice(0,10);
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('mainScreen').classList.add('active');
+  document.getElementById('topScore').textContent=globalScore;
+  buildLessonTable();
+  buildStageMap();
+  initOrbitAngles();
+  startOrbitLoop();
+}
+document.getElementById('pInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('uInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pInput').focus();});
+
+function doLogout(){
+  saveProgress();
+  currentUser='';globalScore=0;stageProgress={};
+  document.getElementById('mainScreen').classList.remove('active');
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('uInput').value='';document.getElementById('pInput').value='';
+}
+
+function saveProgress(){
+  if(!currentUser)return;
+  localStorage.setItem('elec_progress_'+currentUser,JSON.stringify({stageProgress,globalScore}));
+}
+
+// ════════════════════════════════════════════════════════════
+// PAGES
+// ════════════════════════════════════════════════════════════
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='stages')buildStageMap();
+}
+
+// ════════════════════════════════════════════════════════════
+// LESSON TABLE
+// ════════════════════════════════════════════════════════════
+function buildLessonTable(){
+  const tb=document.getElementById('lessonTable');
+  if(tb.innerHTML)return;
+  ELEMENTS.slice(0,20).forEach(el=>{
+    const cfg=el.c.filter(x=>x>0);
+    tb.innerHTML+=`<tr>
+      <td><span class="eq-sym ${TC[el.type]||''}" style="display:inline-flex;width:26px;height:26px;border-radius:5px;align-items:center;justify-content:center;font-weight:700;font-size:.78rem">${el.sym}</span> ${el.th}</td>
+      <td>${el.Z}</td>
+      <td style="color:#e03131">${el.c[0]||''}</td>
+      <td style="color:#e8590c">${el.c[1]||''}</td>
+      <td style="color:#f59f00">${el.c[2]||''}</td>
+      <td style="color:#2f9e44">${el.c[3]||''}</td>
+      <td><span class="chip">${cfg.join(', ')}</span></td>
+    </tr>`;
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// STAGE MAP
+// ════════════════════════════════════════════════════════════
+function stageUnlocked(id){
+  if(id===1)return true;
+  return !!stageProgress[(id-1)];
+}
+function stageCompleted(id){return !!stageProgress[id];}
+function stageStars(id){return stageProgress[id]?.stars||0;}
+function totalCompleted(){return Object.keys(stageProgress).length;}
+
+function buildStageMap(){
+  const grid=document.getElementById('stageGrid');
+  grid.innerHTML='';
+  const done=totalCompleted();
+  document.getElementById('spNum').textContent=done;
+  document.getElementById('spTotal').textContent=STAGE_DEFS.length;
+  document.getElementById('spFill').style.width=Math.round(done/STAGE_DEFS.length*100)+'%';
+  document.getElementById('spScore').textContent=globalScore;
+  STAGE_DEFS.forEach(s=>{
+    const locked=!stageUnlocked(s.id);
+    const completed=stageCompleted(s.id);
+    const stars=stageStars(s.id);
+    const card=document.createElement('div');
+    card.className='stage-card'+(locked?' locked':completed?' completed':'');
+    if(!locked&&!completed)card.classList.add('current-stage');
+    card.innerHTML=`
+      ${completed?'<div class="stage-check">✓</div>':locked?'<div class="stage-lock-icon">🔒</div>':''}
+      <div class="stage-num">ด่าน ${s.id}</div>
+      <div class="stage-name">${s.name}</div>
+      <div class="stage-desc">${s.desc}</div>
+      <div class="stage-meta">
+        <span class="stage-badge ${s.badge}">${s.badgeTxt}</span>
+        <span style="font-size:.72rem;color:var(--text3)">${s.elements.length} ธาตุ</span>
+        <span style="font-size:.72rem;color:var(--text3)">⏱${s.time}s</span>
+      </div>
+      <div class="stage-stars" style="margin-top:6px">${stars?'⭐'.repeat(stars)+'☆'.repeat(3-stars):'☆☆☆'}</div>
+      ${locked?`<div class="req-note">ต้องผ่านด่าน ${s.id-1} ก่อน</div>`:''}
+    `;
+    if(!locked)card.onclick=()=>enterStage(s.id);
+    grid.appendChild(card);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// ENTER STAGE
+// ════════════════════════════════════════════════════════════
+function enterStage(id){
+  const def=STAGE_DEFS.find(s=>s.id===id);
+  if(!def)return;
+  currentStageId=id;
+  // Shuffle elements for this stage using player seed + stage id
+  stageElements=seededShuffle(def.elements,playerSeed+id*997).map(el=>({...el,done:false}));
+  stageIdx=0;
+  correctInStage=0;wrongInStage=0;stageTotalScore=0;
+  stageBestTime=null;stageAllTimes=[];
+  streak=0;correctCount=0;wrongCount=0;bestTime=null;allTimes=[];
+  // UI
+  document.getElementById('sibStageLabel').textContent='ด่านที่ '+id;
+  document.getElementById('sibStageName').textContent=def.name;
+  document.getElementById('gameTabBtn').style.display='';
+  switchPage('game',document.getElementById('gameTabBtn'));
+  buildElQueue();
+  loadElement(0,false);
+  initOrbitAngles();
+  startOrbitLoop();
+}
+
+function leaveGame(){
+  clearInterval(actTimer);
+  document.getElementById('gameTabBtn').style.display='none';
+  switchPage('stages',document.querySelectorAll('.ttab')[1]);
+}
+
+// ════════════════════════════════════════════════════════════
+// ELEMENT QUEUE
+// ════════════════════════════════════════════════════════════
+function buildElQueue(){
+  const q=document.getElementById('elQueue');q.innerHTML='';
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  stageElements.forEach((el,i)=>{
+    const item=document.createElement('div');
+    item.className='eq-item'+(i===stageIdx?' eq-current':'')+(el.done?' eq-done':'');
+    item.id='eq_'+i;
+    item.innerHTML=`<div class="eq-sym ${TC[el.type]||''}">${el.sym}</div>
+      <div><div class="eq-name">${el.th}</div><div class="eq-z">Z=${el.Z}</div></div>
+      ${el.done?'<span style="color:var(--green);font-size:.9rem">✓</span>':''}`;
+    q.appendChild(item);
+  });
+  // update progress
+  const pct=Math.round((correctInStage/stageElements.length)*100);
+  document.getElementById('sibFill').style.width=pct+'%';
+  document.getElementById('sibProg').textContent=`${correctInStage}/${stageElements.length}`;
+}
+
+// ════════════════════════════════════════════════════════════
+// LOAD ELEMENT
+// ════════════════════════════════════════════════════════════
+function loadElement(idx,autoStart){
+  stageIdx=idx;
+  const el=stageElements[idx];
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  timeLeft=def.time;
+  // badge
+  const badge=document.getElementById('elBadge');
+  badge.className='el-badge-box '+(TC[el.type]||'');
+  document.getElementById('elSym').textContent=el.sym;
+  document.getElementById('elZnum').textContent='Z='+el.Z;
+  document.getElementById('elName').textContent=el.th;
+  document.getElementById('elType').textContent=TL[el.type]||el.type;
+  document.getElementById('elCount').textContent='อิเล็กตรอน '+el.Z+' ตัว';
+  // reset
+  clearInterval(actTimer);updTimer();actRunning=false;
+  document.getElementById('startBtn').style.display='';
+  document.getElementById('hintBox').style.display='none';
+  removeOverlay();
+  buildSpinners(el);
+  // queue highlight
+  document.querySelectorAll('.eq-item').forEach(i=>i.classList.remove('eq-current'));
+  const qi=document.getElementById('eq_'+idx);
+  if(qi){qi.classList.add('eq-current');qi.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(autoStart)startRound();
+}
+
+// ════════════════════════════════════════════════════════════
+// SPINNERS
+// ════════════════════════════════════════════════════════════
+function buildSpinners(el){
+  const maxN=Math.max(el.c.findIndex((v,i)=>i>0&&el.c.slice(i).every(x=>x===0)),el.c.filter(x=>x>0).length);
+  const active=Math.min(maxN+1,7);
+  spinVals=[0,0,0,0,0,0,0];
+  const cont=document.getElementById('spinnerRows');cont.innerHTML='';
+  for(let n=0;n<7;n++){
+    const en=n<active;
+    const row=document.createElement('div');row.className='spinner-row';row.id='spr_'+n;
+    if(!en){row.style.opacity='.2';row.style.pointerEvents='none';}
+    const lbl=document.createElement('div');lbl.className='spin-lbl';lbl.style.color=SHELL_CLR[n];lbl.textContent=SHELL_NAMES[n];
+    const ctrl=document.createElement('div');ctrl.className='spin-ctrl';ctrl.id='spc_'+n;
+    const bm=document.createElement('button');bm.className='spin-btn';bm.textContent='−';bm.onclick=()=>changeSpin(n,-1);
+    const val=document.createElement('div');val.className='spin-val';val.id='spv_'+n;val.textContent='0';
+    const bp=document.createElement('button');bp.className='spin-btn';bp.textContent='+';bp.onclick=()=>changeSpin(n,1);
+    ctrl.appendChild(bm);ctrl.appendChild(val);ctrl.appendChild(bp);
+    const bar=document.createElement('div');bar.className='spin-bar';
+    const fill=document.createElement('div');fill.className='spin-fill';fill.id='spf_'+n;fill.style.background=SHELL_CLR[n];fill.style.width='0%';
+    bar.appendChild(fill);
+    const mx=document.createElement('div');mx.className='spin-max';mx.textContent='≤'+MAX_SHELL[n];
+    row.appendChild(lbl);row.appendChild(ctrl);row.appendChild(bar);row.appendChild(mx);
+    cont.appendChild(row);
+  }
+  updTotal();
+}
+function changeSpin(n,d){
+  if(!actRunning)return;
+  spinVals[n]=Math.max(0,Math.min(MAX_SHELL[n],spinVals[n]+d));
+  document.getElementById('spv_'+n).textContent=spinVals[n];
+  document.getElementById('spf_'+n).style.width=(spinVals[n]/MAX_SHELL[n]*100).toFixed(1)+'%';
+  document.getElementById('spc_'+n).classList.toggle('over',spinVals[n]>MAX_SHELL[n]);
+  updTotal();
+}
+function updTotal(){
+  const el=stageElements[stageIdx];
+  const total=spinVals.reduce((a,b)=>a+b,0);
+  document.getElementById('totalVal').textContent=total;
+  document.getElementById('totalNeed').textContent='/ ต้องการ '+el.Z+' ตัว';
+  document.getElementById('checkBtn').disabled=total!==el.Z;
+}
+function resetSpins(){spinVals=[0,0,0,0,0,0,0];for(let n=0;n<7;n++){const v=document.getElementById('spv_'+n);if(v)v.textContent='0';const f=document.getElementById('spf_'+n);if(f)f.style.width='0%';}updTotal();}
+
+// ════════════════════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════════════════════
+function startTimer(){
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  clearInterval(actTimer);timeLeft=def.time;updTimer();
+  actTimer=setInterval(()=>{timeLeft--;updTimer();if(timeLeft<=0){clearInterval(actTimer);timeUp();}},1000);
+}
+function updTimer(){
+  document.getElementById('timerNum').textContent=timeLeft;
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  document.getElementById('timerBox').className=timeLeft<=Math.floor(def.time*.3)?'timer-box warn':'timer-box ok';
+}
+function timeUp(){
+  actRunning=false;streak=0;wrongCount++;wrongInStage++;
+  updStreak();updStats();
+  showOverlay(false,0,'⏰ หมดเวลา!',`คำตอบ: ${stageElements[stageIdx].c.filter(x=>x>0).join(', ')}`);
+  shakeWrap();
+  checkStageFail();
+}
+function startRound(){
+  actRunning=true;document.getElementById('startBtn').style.display='none';
+  document.getElementById('hintBox').style.display='none';
+  buildSpinners(stageElements[stageIdx]);updTotal();startTs=Date.now();startTimer();
+}
+
+// ════════════════════════════════════════════════════════════
+// CHECK ANSWER
+// ════════════════════════════════════════════════════════════
+function checkAnswer(){
+  if(!actRunning)return;
+  const el=stageElements[stageIdx];
+  const elapsed=((Date.now()-startTs)/1000).toFixed(1);
+  let ok=true;
+  for(let n=0;n<7;n++)if(spinVals[n]!==(el.c[n]||0)){ok=false;break;}
+  clearInterval(actTimer);actRunning=false;
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  if(ok){
+    streak++;correctCount++;correctInStage++;
+    const t=parseFloat(elapsed);allTimes.push(t);stageAllTimes.push(t);
+    if(bestTime===null||t<bestTime)bestTime=t;
+    if(stageBestTime===null||t<stageBestTime)stageBestTime=t;
+    const stars=t<=def.time*.33?3:t<=def.time*.66?2:1;
+    const pts=Math.round((def.time-t)*3+streak*8+stars*12);
+    globalScore+=pts;stageTotalScore+=pts;
+    document.getElementById('topScore').textContent=globalScore;
+    stageElements[stageIdx].done=true;
+    updStreak();updStats();buildElQueue();
+    showOverlay(true,pts,`✅ ถูกต้อง! ${'⭐'.repeat(stars)}`,`${elapsed}s · สาย ${streak}`);
+    spawnConfetti();
+    // next or stage clear
+    setTimeout(()=>{
+      removeOverlay();
+      if(correctInStage>=stageElements.length){stageClear();}
+      else{
+        // find next undone
+        let next=stageIdx+1;
+        while(next<stageElements.length&&stageElements[next].done)next++;
+        if(next<stageElements.length)loadElement(next,true);else stageClear();
+      }
+    },1600);
+  } else {
+    streak=0;wrongCount++;wrongInStage++;updStreak();updStats();shakeWrap();
+    showOverlay(false,0,'❌ ไม่ถูก',`คำตอบ: ${el.c.filter(x=>x>0).join(', ')}`);
+    setTimeout(()=>{removeOverlay();actRunning=true;startTimer();startTs=Date.now();},2000);
+    checkStageFail();
+  }
+}
+
+function checkStageFail(){
+  // fail if wrong > elements.length (can't possibly get passing score)
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  const remaining=stageElements.filter(e=>!e.done).length;
+  const maxPossible=correctInStage+remaining;
+  const minPct=Math.round(correctInStage/stageElements.length*100);
+  if(wrongInStage>stageElements.length&&minPct<def.passScore){
+    setTimeout(()=>stageFail(),2500);
+  }
+}
+
+function useHint(){
+  if(!actRunning)return;
+  const el=stageElements[stageIdx];
+  globalScore=Math.max(0,globalScore-10);
+  document.getElementById('topScore').textContent=globalScore;
+  const h=document.getElementById('hintBox');
+  h.textContent=`💡 ${el.th}: ${el.c.map((v,i)=>v>0?`n=${i+1}→${v}`:'').filter(Boolean).join(' | ')}`;
+  h.style.display='block';
+}
+
+// ════════════════════════════════════════════════════════════
+// STAGE CLEAR / FAIL
+// ════════════════════════════════════════════════════════════
+function stageClear(){
+  clearInterval(actTimer);
+  const def=STAGE_DEFS.find(s=>s.id===currentStageId);
+  const pct=Math.round(correctInStage/stageElements.length*100);
+  const stars=pct>=95?3:pct>=80?2:pct>=def.passScore?1:0;
+  // save progress
+  const prev=stageProgress[currentStageId];
+  if(!prev||stars>prev.stars){
+    stageProgress[currentStageId]={stars,score:stageTotalScore,bestTime:stageBestTime,pct};
+  }
+  saveProgress();
+  // update modal
+  document.getElementById('clearIcon').textContent=stars===3?'🏆':stars===2?'🎉':'✅';
+  document.getElementById('clearStars').textContent='⭐'.repeat(stars)+(stars<3?'☆'.repeat(3-stars):'');
+  document.getElementById('clearTitle').textContent=stars>0?'ผ่านด่านแล้ว!':'ไม่ผ่าน...';
+  document.getElementById('clearSub').textContent=`ด่าน ${currentStageId}: ${def.name}\nตอบถูก ${correctInStage}/${stageElements.length} (${pct}%) | เวลาดีที่สุด ${stageBestTime||'-'}s`;
+  document.getElementById('mCorrect').textContent=correctInStage+'/'+stageElements.length;
+  document.getElementById('mTime').textContent=(stageBestTime||'-')+'s';
+  document.getElementById('mPts').textContent='+'+stageTotalScore;
+  const nextExists=STAGE_DEFS.find(s=>s.id===currentStageId+1);
+  document.getElementById('nextStageBtn').style.display=nextExists?'':'none';
+  spawnConfetti();spawnConfetti();
+  document.getElementById('clearModal').style.display='flex';
+}
+
+function stageFail(){
+  clearInterval(actTimer);actRunning=false;
+  document.getElementById('failSub').textContent=`ตอบถูก ${correctInStage}/${stageElements.length} — ต้องผ่าน ${STAGE_DEFS.find(s=>s.id===currentStageId)?.passScore||80}%`;
+  document.getElementById('failModal').style.display='flex';
+}
+
+function goNextStage(){
+  document.getElementById('clearModal').style.display='none';
+  enterStage(currentStageId+1);
+}
+function goStageMap(){
+  document.getElementById('clearModal').style.display='none';
+  document.getElementById('failModal').style.display='none';
+  document.getElementById('gameTabBtn').style.display='none';
+  switchPage('stages',document.querySelectorAll('.ttab')[1]);
+}
+function retryStage(){
+  document.getElementById('failModal').style.display='none';
+  enterStage(currentStageId);
+}
+
+// ════════════════════════════════════════════════════════════
+// OVERLAY
+// ════════════════════════════════════════════════════════════
+function showOverlay(ok,pts,title,sub){
+  removeOverlay();
+  const ov=document.createElement('div');
+  ov.id='resOv';ov.className='result-overlay '+(ok?'ok-ov':'fail-ov');
+  ov.innerHTML=`<div class="ov-icon">${ok?'🎉':'💥'}</div>
+    <div class="ov-title" style="color:${ok?'var(--green)':'var(--red)'}">${title}</div>
+    <div class="ov-sub">${sub}</div>
+    ${ok?`<div class="ov-pts">+${pts}</div>`:''}`;
+  document.getElementById('orbitWrap').appendChild(ov);
+}
+function removeOverlay(){const o=document.getElementById('resOv');if(o)o.remove();}
+function updStreak(){document.getElementById('streakNum').textContent='🔥'+streak;}
+function updStats(){
+  document.getElementById('sCorrect').textContent=correctCount;
+  document.getElementById('sWrong').textContent=wrongCount;
+  document.getElementById('sBest').textContent=bestTime!==null?bestTime+'s':'—';
+  document.getElementById('sAvg').textContent=allTimes.length?(allTimes.reduce((a,b)=>a+b,0)/allTimes.length).toFixed(1)+'s':'—';
+}
+function shakeWrap(){const w=document.getElementById('orbitWrap');w.style.animation='shake .4s ease';setTimeout(()=>w.style.animation='',450);}
+
+// ════════════════════════════════════════════════════════════
+// ORBIT CANVAS
+// ════════════════════════════════════════════════════════════
+function initOrbitAngles(){
+  orbitAngles=[];
+  for(let n=0;n<7;n++){orbitAngles.push([]);for(let e=0;e<MAX_SHELL[n];e++)orbitAngles[n].push(Math.random()*Math.PI*2);}
+}
+function startOrbitLoop(){
+  if(orbitAF)cancelAnimationFrame(orbitAF);
+  (function loop(){
+    for(let n=0;n<7;n++)for(let e=0;e<orbitAngles[n].length;e++)orbitAngles[n][e]+=(0.012+n*.004);
+    if(stageElements.length>0)drawOrbit();
+    orbitAF=requestAnimationFrame(loop);
+  })();
+}
+const TYPE_CLR={alkali:'#fb923c',alkaline:'#facc15',transition:'#4ade80',posttransition:'#60a5fa',metalloid:'#c084fc',nonmetal:'#f472b6',halogen:'#f87171',noble:'#94a3b8',lanthanide:'#22d3ee',actinide:'#fb923c'};
+function drawOrbit(){
+  const cv=document.getElementById('orbitCanvas');if(!cv)return;
+  const sz=300,ctx=cv.getContext('2d'),cx=sz/2,cy=sz/2;
+  ctx.clearRect(0,0,sz,sz);
+  ctx.fillStyle='#f8f9ff';ctx.fillRect(0,0,sz,sz);
+  const el=stageElements[stageIdx]||ELEMENTS[0];
+  const radii=[sz*.08,sz*.145,sz*.215,sz*.28,sz*.34,sz*.392,sz*.435];
+  for(let n=0;n<7;n++){
+    const c=spinVals[n]||0;if(c===0&&n>=4)continue;
+    ctx.beginPath();ctx.arc(cx,cy,radii[n],0,Math.PI*2);
+    ctx.strokeStyle=SHELL_CLR[n]+(c>0?'55':'1a');ctx.lineWidth=c>0?1.5:1;ctx.stroke();
+    if(c>0){ctx.fillStyle=SHELL_CLR[n]+'0d';ctx.fill();}
+  }
+  // nucleus
+  ctx.beginPath();ctx.arc(cx,cy,sz*.052,0,Math.PI*2);
+  ctx.fillStyle=TYPE_CLR[el.type]||'#94a3b8';ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#1e293b';ctx.font=`bold ${sz*.037}px Sarabun,sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(el.sym,cx,cy);
+  // electrons with trails
+  for(let n=0;n<7;n++){
+    const count=spinVals[n]||0;
+    for(let e=0;e<count;e++){
+      const a=orbitAngles[n][e]||0;
+      const ex=cx+radii[n]*Math.cos(a),ey=cy+radii[n]*Math.sin(a);
+      for(let t=1;t<=3;t++){
+        const ta=a-t*.07,tx=cx+radii[n]*Math.cos(ta),ty=cy+radii[n]*Math.sin(ta);
+        ctx.beginPath();ctx.arc(tx,ty,sz*.015*(1-t*.25),0,Math.PI*2);
+        ctx.fillStyle=SHELL_CLR[n]+(Math.round((1-t*.3)*70).toString(16).padStart(2,'0'));ctx.fill();
+      }
+      ctx.beginPath();ctx.arc(ex,ey,sz*.018,0,Math.PI*2);
+      ctx.fillStyle=SHELL_CLR[n];ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.2;ctx.stroke();
+    }
+  }
+  const s=spinVals.map((c,i)=>c>0?c:'').filter(Boolean).join(', ');
+  document.getElementById('configLabel').textContent=s?'การจัดเรียง: '+s:'—';
+}
+
+// ════════════════════════════════════════════════════════════
+// CONFETTI
+// ════════════════════════════════════════════════════════════
+function spawnConfetti(){
+  const layer=document.getElementById('ptLayer');
+  const cv=document.getElementById('orbitCanvas');const rect=cv.getBoundingClientRect();
+  const cols=['#e03131','#e8590c','#f59f00','#2f9e44','#2563eb','#7c3aed','#db2777','#fff'];
+  for(let i=0;i<42;i++){setTimeout(()=>{
+    const p=document.createElement('div');p.className='pt';
+    const s=5+Math.random()*11,c=cols[i%cols.length];
+    const vx=(Math.random()-.5)*210,vy=-(90+Math.random()*170);
+    const isRect=Math.random()>.5;
+    p.style.cssText=`width:${s}px;height:${isRect?s*.35:s}px;background:${c};border-radius:${isRect?'2px':'50%'};left:${rect.left+rect.width/2+(Math.random()-.5)*40}px;top:${rect.top+rect.height*.5}px;position:fixed;z-index:200;transition:transform 1.2s ease-out,opacity 1.2s;`;
+    layer.appendChild(p);requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transform=`translate(${vx}px,${vy}px) rotate(${Math.random()*360}deg)`;p.style.opacity='0';}));
+    setTimeout(()=>p.remove(),1350);
+  },i*20);}
+}
+
+function showToast(msg){
+  const t=document.createElement('div');t.className='toast';
+  t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3100);
+}
+
+initOrbitAngles();
+</script>
+</body>
+</html>
